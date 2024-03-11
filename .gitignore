@@ -1,0 +1,23 @@
+# Ignore any git files in the frontend and backend repositories
+*/.git*
+
+# Ignore backend-related files and directories
+__pycache__
+db.sqlite3
+/backend/media/
+/backend/static/
+/backend/.env
+/backend/.vscode/
+/backend/venv/
+
+# Ignore frontend-related files and directories
+/frontend/node_modules/
+/frontend/build/
+/frontend/.env
+/frontend/.vscode/
+package-lock.json
+/frontend/README.md
+
+# Ignore editor-specific files
+.vscode/
+
