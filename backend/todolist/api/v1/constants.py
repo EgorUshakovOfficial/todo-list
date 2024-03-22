@@ -12,4 +12,12 @@ PASSWORDS_MISMATCH_ERROR_CODE = 'passwords_mismatch'
 SYSTEM_LEVEL_ERROR_CODE = 'system_level'
 
 AWS_S3_KEY_LENGTH = 32
+COOKIE_MAX_AGE = 3600*7*30
 REFRESH_TOKEN_COOKIE_NAME = 'refresh-token'
+REFRESH_TOKEN_COOKIE_OPTIONS = {
+    'httponly':True,
+    'secure':True,
+    'samesite':'Strict',
+    'max_age': COOKIE_MAX_AGE
+}
+REFRESH_TOKEN_SUPPORT_COOKIE_NAME = 'refresh'

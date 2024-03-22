@@ -10,7 +10,7 @@ from api.v1.utils.misc import get_error_message, generate_unique_key, upload_pro
 from api.v1.user.serializers import UserSerializer
 from api.v1.models import User
 from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, EMAIL_ALREADY_EXISTS_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, \
-    PASSWORDS_MISMATCH_ERROR_CODE, REFRESH_TOKEN_COOKIE_NAME, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
+    COOKIE_MAX_AGE, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_SUPPORT_COOKIE_NAME, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -20,17 +20,17 @@ def login_view(request):
     password = data.get('password', None)
 
     if not email:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide an email field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide an email field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     if not password:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     user = authenticate(request, email=email, password=password)
     if not user:
-        error = get_error_message(HTTP_401_UNAUTHORIZED, 'Email or password is incorrect.', INVALID_ACCESS_ERROR_CODE)
-        return Response(data=error, status=HTTP_401_UNAUTHORIZED)
+        error_obj = get_error_message(HTTP_401_UNAUTHORIZED, 'Email or password is incorrect.', INVALID_ACCESS_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_401_UNAUTHORIZED)
 
     # Generates access and refresh JWT tokens from the user object
     tokens = get_tokens_for_user(user)
@@ -39,7 +39,14 @@ def login_view(request):
 
     # Sets refresh token as a HTTP only cookie
     refresh_token = tokens['refresh']
-    response.set_cookie(refresh_token, httponly=True)
+    response.set_cookie(
+        REFRESH_TOKEN_COOKIE_NAME,
+        refresh_token,
+        **REFRESH_TOKEN_COOKIE_OPTIONS
+    )
+
+    # Set another cookie to check for the existence of the HTTP only cookie
+    response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
 
     return response
 
@@ -49,18 +56,8 @@ def register_user_view(request):
     data = request.data
     password = data.get('password', None)
     if not password:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
-
-    confirm_password = data.get('confirmPassword', None)
-    if not confirm_password:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a confirm password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
-
-    # Verify password and confirm-password are the same
-    if password != confirm_password:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'Password and confirm password must match.', PASSWORDS_MISMATCH_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     try:
         # Validates email, username, and name in the body of the request
@@ -71,7 +68,7 @@ def register_user_view(request):
             profile_image_url = ''
 
             # If a profile image is uploaded, save it to the AWS S3 bucket
-            if profile_image:
+            if profile_image and profile_image != "null":
                 filename = profile_image.name
                 key = generate_unique_key(filename)
                 is_upload_success = upload_profile_image_to_s3(profile_image, key)
@@ -97,13 +94,20 @@ def register_user_view(request):
 
             # Sets refresh token as a HTTP only cookie
             refresh_token = tokens['refresh']
-            response.set_cookie(REFRESH_TOKEN_COOKIE_NAME, refresh_token, httponly=True)
+            response.set_cookie(
+                REFRESH_TOKEN_COOKIE_NAME,
+                refresh_token,
+                **REFRESH_TOKEN_COOKIE_OPTIONS
+            )
+
+            # Set another cookie to check for the existence of the HTTP only cookie
+            response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
 
             return response
 
     except IntegrityError:
-        error = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', EMAIL_ALREADY_EXISTS_ERROR_CODE)
-        return Response(data=error, status=HTTP_400_BAD_REQUEST)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', EMAIL_ALREADY_EXISTS_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     except ValidationError:
         error_obj = serializer.errors
@@ -122,7 +126,7 @@ def retrieve_user_view(request):
 @api_view(['GET'])
 @authentication_classes([])
 def refresh_access_token_view(request):
-    refresh_token = request.COOKIES.get(REFRESH_TOKEN_COOKIE_NAME, None)
+    refresh_token = request.COOKIES.get(REFRESH_TOKEN_COOKIE_NAME, '')
     refresh_token = validate_refresh_token(refresh_token)
     if not refresh_token:
         error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Refresh token is missing or invalid.', REFRESH_TOKEN_ERROR_CODE)

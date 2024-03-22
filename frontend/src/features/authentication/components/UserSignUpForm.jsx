@@ -59,7 +59,6 @@ export default function UserSignUpForm(){
                     onChange={userSignUpProps.profileImageOnChange}
                 />
             </FormControl>
-            <Button mt={4} colorScheme="teal">Submit</Button>
             {(userSignUpProps.profileImage !== null) && (
                 <Box>
                     <img
@@ -72,5 +71,5 @@ export default function UserSignUpForm(){
             )}
             <Button mt={4} colorScheme="teal" onClick={userSignUpProps.submitUserSignUpForm}>Submit</Button>
         </Box>
-    )
-}
+    );
+};
