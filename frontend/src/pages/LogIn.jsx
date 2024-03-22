@@ -1,13 +1,12 @@
 import { Head } from "../components";
 import { MainLayout } from "../containers/layouts";
+import {LogInForm} from '../features/authentication';
 
 export default function LogIn(){
     return (
         <MainLayout>
             <Head pageTitle="Login" />
-            <div>
-                Log In here...
-            </div>
+            <LogInForm />
         </MainLayout>
     );
 };
