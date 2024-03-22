@@ -135,4 +135,16 @@ def refresh_access_token_view(request):
     data = {'access':str(refresh_token.access_token)}
     return Response(data=data)
 
+@api_view(['GET'])
+@authentication_classes([])
+def logout_view(request):
+    response = Response()
+
+    # Delete all authentication-related cookies
+    response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
+    response.delete_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME)
+
+    return response
+
+
 

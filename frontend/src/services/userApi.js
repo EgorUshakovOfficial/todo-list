@@ -12,6 +12,15 @@ const login = (email, password, onSuccess, onError) => {
     const headers = {'Content-Type':'application/json'};
     post('/users/login', data, headers, onSuccess, onError);
 };
+/*
+* Logs the user out.
+* @param onSuccess is a callback that executes on a successful response.
+* @param onError is a callback that executes on an error response.
+*/
+const logout = (onSuccess, onError) => {
+    const headers = {'Content-Type':'application/json'};
+    get('/users/logout', headers, onSuccess, onError);
+}
 
 /*
 * Retrieves user information based on an access token.
@@ -61,6 +70,7 @@ const refreshUserToken = (onSuccess, onError) => {
 
 export  {
     login,
+    logout,
     getUser,
     registerUser,
     refreshUserToken

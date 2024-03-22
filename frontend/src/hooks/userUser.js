@@ -6,7 +6,7 @@ export default function useUser(){
     const [user, setUser] = useState(null);
     const { token } = useContext(AuthContext);
 
-    const userOnSuccess = data => setUser(data.user);
+    const userOnSuccess = data => setUser(data);
     const userOnError  = error => console.log(`Error: ${error}`);
 
     useEffect(() => {
