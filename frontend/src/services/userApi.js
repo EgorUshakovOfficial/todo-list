@@ -9,8 +9,11 @@ import {get, post} from '../lib/httpService';
 */
 const login = (email, password, onSuccess, onError) => {
     const data = {email, password};
-    const headers = {'Content-Type':'application/json'};
-    post('/users/login', data, headers, onSuccess, onError);
+    const options = {
+        headers:{'Content-Type':'application/json'},
+        withCredentials:true
+    };
+    post('/users/login', data, options, onSuccess, onError);
 };
 /*
 * Logs the user out.
@@ -18,8 +21,12 @@ const login = (email, password, onSuccess, onError) => {
 * @param onError is a callback that executes on an error response.
 */
 const logout = (onSuccess, onError) => {
-    const headers = {'Content-Type':'application/json'};
-    get('/users/logout', headers, onSuccess, onError);
+    const options = {
+        headers:{'Content-Type':'application/json'},
+        withCredentials: true
+    };
+
+    get('/users/logout', options, onSuccess, onError);
 }
 
 /*
@@ -29,11 +36,14 @@ const logout = (onSuccess, onError) => {
 * @param onError is a callback that executes on an error response.
 */
 const getUser = (token, onSuccess, onError) => {
-    const headers = {
-        'Content-Type':'application/json',
-        'Authorization': `Bearer ${token}`
+    const options = {
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        withCredentials:true
     };
-    get('/users/me', headers, onSuccess, onError);
+    get('/users/me', options, onSuccess, onError);
 }
 
 /*
@@ -43,7 +53,10 @@ const getUser = (token, onSuccess, onError) => {
 * @param onError is a callback that executes on an error response.
 */
 const registerUser = (userData, onSuccess, onError) => {
-    const headers = {'Content-Type':'multipart/form-data'};
+    const options =  {
+        headers:{'Content-Type':'multipart/form-data'},
+        withCredentials:true
+    };
 
     // Convert user data object into form data, due to the content type.
     const formData = new FormData();
@@ -55,7 +68,7 @@ const registerUser = (userData, onSuccess, onError) => {
     formData.append('profileImage', userData.profileImage);
     formData.append('password', userData.password);
 
-    post('/users/register', formData, headers, onSuccess, onError);
+    post('/users/register', formData, options, onSuccess, onError);
 };
 
 /*
@@ -64,8 +77,12 @@ const registerUser = (userData, onSuccess, onError) => {
 * @param onError is a callback that executes on an error response.
 */
 const refreshUserToken = (onSuccess, onError) => {
-    const headers = {'Content-Type':'application/json'};
-    get('/users/refresh', headers, onSuccess, onError);
+    const options = {
+        headers:{'Content-Type':'application/json'},
+        withCredentials:true
+    };
+
+    get('/users/refresh', options, onSuccess, onError);
 }
 
 export  {

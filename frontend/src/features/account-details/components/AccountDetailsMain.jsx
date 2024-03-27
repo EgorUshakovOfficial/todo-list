@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import {Box, Heading, Text} from '@chakra-ui/react';
 import AccountDetailsUserDetails from './AccountDetailsUserDetails';
-import {UserContext} from '../../../context/UserProvider';
+import {AuthContext} from '../../../context/AuthProvider';
 
 export default function AccountDetailsMain(){
-    const {user} = useContext(UserContext);
+    const {authState} = useContext(AuthContext);
 
     return (
         <Box>
@@ -12,10 +12,10 @@ export default function AccountDetailsMain(){
                 Account Details
             </Heading>
             <Text mt="4">
-                Welcome {user.name}! You can manage your account details here!
+                Welcome {authState.user.name}! You can manage your account details here!
             </Text>
             <Box>
-                <AccountDetailsUserDetails />
+            <AccountDetailsUserDetails />
             </Box>
         </Box>
     )

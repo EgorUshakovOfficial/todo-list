@@ -1,13 +1,13 @@
 import {useState, useContext} from 'react';
-import {UserContext} from '../../../context/UserProvider';
+import {AuthContext} from '../../../context/AuthProvider';
 import {validateEmail} from '../../../utils/validate';
 
 export default function useAccountDetailsUserDetails(){
-    const {user} = useContext(UserContext);
+    const {authState} = useContext(AuthContext);
 
-    const [name, setName] = useState({value:user.name, isReadOnly:true});
-    const [email, setEmail] = useState({value:user.email, isReadOnly:true});
-    const [username, setUsername] = useState({value:user.username, isReadOnly:true});
+    const [name, setName] = useState({value:authState.user.name, isReadOnly:true});
+    const [email, setEmail] = useState({value:authState.user.email, isReadOnly:true});
+    const [username, setUsername] = useState({value:authState.user.username, isReadOnly:true});
 
     const nameOnChange = event => setName(state => ({...state, value:event.target.value}));
     const emailOnChange = event => setEmail(state => ({...state, value:event.target.value}));

@@ -9,7 +9,7 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField(validators=[], required=False)
     name = serializers.CharField(validators=[], required=False)
 
-    def validate(self, data):
+    def validate(self, data, **kwargs):
         email = data.get('email', None)
         if not email:
             error = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide an email field.', MISSING_REQUIRED_FIELD_ERROR_CODE)

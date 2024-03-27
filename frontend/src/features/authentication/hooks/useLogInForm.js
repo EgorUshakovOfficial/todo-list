@@ -3,13 +3,14 @@ import {useNavigate} from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import {validateEmail, validatePassword} from '../../../utils/validate';
 import { AuthContext } from '../../../context/AuthProvider';
+import { getUser } from '../../../services/userApi';
 import { MIN_PASSWORD_LENGTH } from '../../../constants';
 
 export default function useLogInForm(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email:'', password:''});
-    const { login, setToken } = useContext(AuthContext);
+    const { login, setAuthState } = useContext(AuthContext);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -40,12 +41,25 @@ export default function useLogInForm(){
         return Object.values(formFieldErrors).some(value => value === '');
     };
 
-    const loginOnSuccess = data => {
-        setToken(data.access);
-        navigate('/dashboard');
+    const loginOnSuccess = response => {
+        const token = response.data.access;
+
+        const fetchUser = () => {
+            const userOnSuccess = response => {
+                const user = response.data;
+                setAuthState({user:{...user}, token});
+                navigate('/dashboard');
+            };
+
+            const userOnError = error => console.log(error);
+
+            getUser(token, userOnSuccess, userOnError);
+        };
+
+        fetchUser();
     };
 
-    const loginOnError = error => {
+    const loginOnError = () => {
         toast({
             title: 'Email or password is incorrect',
             status:'error',

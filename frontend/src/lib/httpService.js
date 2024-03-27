@@ -1,20 +1,18 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants';
 
-axios.defaults.withCredentials = true;
-
-const get = (endpoint, headers, onSuccess, onError) => {
+const get = (endpoint, options, onSuccess, onError) => {
     const url = `${BASE_URL}${endpoint}`;
-    axios(url, {headers})
-    .then(response => onSuccess(response.data))
-    .catch(error => onError(error.data));
+    axios.get(url, options)
+    .then(response => onSuccess(response))
+    .catch(error => onError(error));
 };
 
-const post = (endpoint, data, headers, onSuccess, onError) => {
+const post = (endpoint, data, options, onSuccess, onError) => {
     const url = `${BASE_URL}${endpoint}`;
-    axios.post(url, data, {headers})
-    .then(response => onSuccess(response.data))
-    .catch(error => onError(error.data));
+    axios.post(url, data, options)
+    .then(response => onSuccess(response))
+    .catch(error => onError(error));
 };
 
 export {get, post};

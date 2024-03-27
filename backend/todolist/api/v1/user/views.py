@@ -9,8 +9,8 @@ from api.v1.utils.users import get_tokens_for_user
 from api.v1.utils.misc import get_error_message, generate_unique_key, upload_profile_image_to_s3
 from api.v1.user.serializers import UserSerializer
 from api.v1.models import User
-from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, EMAIL_ALREADY_EXISTS_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, \
-    COOKIE_MAX_AGE, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_SUPPORT_COOKIE_NAME, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
+from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, INTEGRITY_ERROR_CODE, \
+     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -44,9 +44,6 @@ def login_view(request):
         refresh_token,
         **REFRESH_TOKEN_COOKIE_OPTIONS
     )
-
-    # Set another cookie to check for the existence of the HTTP only cookie
-    response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
 
     return response
 
@@ -100,13 +97,10 @@ def register_user_view(request):
                 **REFRESH_TOKEN_COOKIE_OPTIONS
             )
 
-            # Set another cookie to check for the existence of the HTTP only cookie
-            response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
-
             return response
 
     except IntegrityError:
-        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', EMAIL_ALREADY_EXISTS_ERROR_CODE)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', INTEGRITY_ERROR_CODE)
         return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     except ValidationError:
@@ -139,12 +133,10 @@ def refresh_access_token_view(request):
 @authentication_classes([])
 def logout_view(request):
     response = Response()
-
-    # Delete all authentication-related cookies
     response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
-    response.delete_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME)
-
     return response
+
+
 
 
 
