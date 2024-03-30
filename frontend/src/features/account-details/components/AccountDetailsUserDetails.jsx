@@ -13,21 +13,21 @@ export default function AccountDetailsUserDetails(){
                 fieldObj={name}
                 fieldOnChange={callbackProps.nameOnChange}
                 fieldOnClick={callbackProps.nameOnClick}
-                updateFieldValueOnClick={() => {}}
+                updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('name', name.value)}
             />
             <AccountDetailsUserDetailsRow
                 fieldName="Email"
                 fieldObj={email}
                 fieldOnChange={callbackProps.emailOnChange}
                 fieldOnClick={callbackProps.emailOnClick}
-                updateFieldValueOnClick={() => {}}
+                updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('email', email.value)}
             />
             <AccountDetailsUserDetailsRow
                 fieldName="Username"
                 fieldObj={username}
                 fieldOnChange={callbackProps.usernameOnChange}
                 fieldOnClick={callbackProps.usernameOnClick}
-                updateFieldValueOnClick={() => {}}
+                updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('username', username.value)}
             />
         </Box>
     );

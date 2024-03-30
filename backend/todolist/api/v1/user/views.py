@@ -134,7 +134,29 @@ def logout_view(request):
     response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
     return response
 
+@api_view(['POST'])
+def partial_user_edit_view(request):
+    serializer = UserSerializer(instance=request.user, data=request.data, partial=True)
 
+    try:
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response()
+
+    except IntegrityError:
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use!', INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj)
+
+    except ValidationError:
+        errors = serializer.errors
+        field_name, error_message = extract_first_error(errors, ['email'])
+        error_message = error_message.replace('This field', field_name)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, error_message, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj)
+
+    except Exception as e:
+        error_obj = get_error_message(HTTP_500_SYSTEM, 'Error! Something went wrong!', SYSTEM_LEVEL_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_500_SYSTEM)
 
 
 

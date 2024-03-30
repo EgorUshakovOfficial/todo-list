@@ -13,7 +13,7 @@ const login = (email, password, onSuccess, onError) => {
         headers:{'Content-Type':'application/json'},
         withCredentials:true
     };
-    post('/users/login', data, options, onSuccess, onError);
+    post('/user/login', data, options, onSuccess, onError);
 };
 /*
 * Logs the user out.
@@ -26,7 +26,7 @@ const logout = (onSuccess, onError) => {
         withCredentials: true
     };
 
-    get('/users/logout', options, onSuccess, onError);
+    get('/user/logout', options, onSuccess, onError);
 }
 
 /*
@@ -43,7 +43,7 @@ const getUser = (token, onSuccess, onError) => {
         },
         withCredentials:true
     };
-    get('/users/me', options, onSuccess, onError);
+    get('/user/me', options, onSuccess, onError);
 }
 
 /*
@@ -68,7 +68,7 @@ const registerUser = (userData, onSuccess, onError) => {
     formData.append('profileImage', userData.profileImage);
     formData.append('password', userData.password);
 
-    post('/users/register', formData, options, onSuccess, onError);
+    post('/user/register', formData, options, onSuccess, onError);
 };
 
 /*
@@ -82,13 +82,32 @@ const refreshUserToken = (onSuccess, onError) => {
         withCredentials:true
     };
 
-    get('/users/refresh', options, onSuccess, onError);
+    get('/user/refresh', options, onSuccess, onError);
 }
+
+/*
+* Updates fields in the existing user account.
+* @param data is an object filled with required user fields.
+* @param onSuccess is a callback that executes on a successful response.
+* @param onError is a callback that executes on an error response.
+*/
+const updateUser = (token, data, onSuccess, onError) => {
+    const options =  {
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        withCredentials:true
+    };
+
+    post('/user/partial', data, options, onSuccess, onError);
+};
 
 export  {
     login,
     logout,
     getUser,
     registerUser,
-    refreshUserToken
+    updateUser,
+    refreshUserToken,
 };
