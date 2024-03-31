@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import { AuthContext } from '../../../context/AuthProvider';
 import { validateEmail, validatePassword, validateUsername } from '../../../utils/validate';
+import { getUser } from '../../../services/userApi';
 
 export default function useUserSignup(){
     const [name, setName] = useState('');
@@ -11,7 +12,7 @@ export default function useUserSignup(){
     const [password, setPassword] = useState('');
     const [profileImage, setProfileImage] = useState(null);
     const [errors, setErrors] = useState({ email:'', username:'', password:'' });
-    const {setToken, registerUser} = useContext(AuthContext);
+    const {registerUser, setAuthState} = useContext(AuthContext);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -55,10 +56,21 @@ export default function useUserSignup(){
         return Object.values(formFieldErrors).some(value => value === '');
     };
 
-    const registerOnSuccess = data => {
-        setToken(data.access);
-        console.log(data);
-        navigate('/dashboard');
+    const registerOnSuccess = response => {
+        const token = response.data.access;
+        const fetchUser = () => {
+            const userOnSuccess = response => {
+                const user = response.data;
+                setAuthState(() => ({user:{...user}, token}));
+                navigate('/dashboard');
+            };
+
+            const userOnError = error => console.error(error);
+
+            getUser(token, userOnSuccess, userOnError);
+        };
+
+        fetchUser();
     };
 
     const registerOnError = error => {

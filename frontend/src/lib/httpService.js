@@ -1,20 +1,66 @@
-import axios from 'axios';
-import { BASE_URL } from '../constants';
+import api from './api';
+import {refreshAccessToken} from '../utils/token';
+import { LOGIN_ENDPOINT } from '../constants';
 
-axios.defaults.withCredentials = true;
+const attachInterceptors = (axiosInstance, options) => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+        config => {
+            config.headers = options.headers;
 
-const get = (endpoint, headers, onSuccess, onError) => {
-    const url = `${BASE_URL}${endpoint}`;
-    axios(url, {headers})
-    .then(response => onSuccess(response.data))
-    .catch(error => onError(error.data));
+            const withCredentials = options.withCredentials;
+            if (withCredentials){
+                config.withCredentials = withCredentials;
+            }
+
+            return config;
+        },
+        error => Promise.reject(error)
+    );
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+        response => response,
+        async error => {
+            const {pathname} = window.location;
+            const prevRequest = error?.config;
+
+            if (error?.response?.status === 401 && !prevRequest?.sent && pathname !== LOGIN_ENDPOINT){
+                prevRequest.sent = true;
+                try {
+                    const newAccessToken = await refreshAccessToken();
+                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    return api(prevRequest);
+                } catch(refreshError){
+                    return Promise.reject(refreshError);
+                }
+            }
+
+            return Promise.reject(error);
+        }
+    );
+
+    return [requestInterceptor, responseInterceptor];
 };
 
-const post = (endpoint, data, headers, onSuccess, onError) => {
-    const url = `${BASE_URL}${endpoint}`;
-    axios.post(url, data, {headers})
-    .then(response => onSuccess(response.data))
-    .catch(error => onError(error.data));
+const get = (endpoint, options, onSuccess, onError) => {
+    const [requestInterceptor, responseInterceptor] = attachInterceptors(api, options);
+
+    api.get(endpoint)
+    .then(response => onSuccess(response))
+    .catch(error => onError(error));
+
+    api.interceptors.request.eject(requestInterceptor);
+    api.interceptors.response.eject(responseInterceptor);
+};
+
+const post = (endpoint, data, options, onSuccess, onError) => {
+    const [requestInterceptor, responseInterceptor] = attachInterceptors(api, options);
+
+    api.post(endpoint, data, options)
+    .then(response => onSuccess(response))
+    .catch(error => onError(error));
+
+    api.interceptors.request.eject(requestInterceptor);
+    api.interceptors.response.eject(responseInterceptor);
 };
 
 export {get, post};

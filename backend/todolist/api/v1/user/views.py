@@ -6,11 +6,11 @@ from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 from api.v1.utils.validation import validate_refresh_token
 from api.v1.utils.users import get_tokens_for_user
-from api.v1.utils.misc import get_error_message, generate_unique_key, upload_profile_image_to_s3
+from api.v1.utils.misc import get_error_message, generate_unique_key, upload_profile_image_to_s3, extract_first_error
 from api.v1.user.serializers import UserSerializer
 from api.v1.models import User
-from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, EMAIL_ALREADY_EXISTS_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, \
-    COOKIE_MAX_AGE, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_SUPPORT_COOKIE_NAME, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
+from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, INTEGRITY_ERROR_CODE, \
+     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -45,21 +45,14 @@ def login_view(request):
         **REFRESH_TOKEN_COOKIE_OPTIONS
     )
 
-    # Set another cookie to check for the existence of the HTTP only cookie
-    response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
-
     return response
 
 @api_view(['POST'])
 @authentication_classes([])
 def register_user_view(request):
-    data = request.data
-    password = data.get('password', None)
-    if not password:
-        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'You must provide a password field.', MISSING_REQUIRED_FIELD_ERROR_CODE)
-        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
-
     try:
+        data = request.data
+
         # Validates email, username, and name in the body of the request
         serializer = UserSerializer(data=data)
 
@@ -83,7 +76,7 @@ def register_user_view(request):
                 email=validated_data['email'],
                 username=validated_data['username'],
                 name=validated_data['name'],
-                password=password,
+                password=validated_data['password'],
                 profile_image_url=profile_image_url
             )
 
@@ -100,19 +93,18 @@ def register_user_view(request):
                 **REFRESH_TOKEN_COOKIE_OPTIONS
             )
 
-            # Set another cookie to check for the existence of the HTTP only cookie
-            response.set_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME, '', max_age=COOKIE_MAX_AGE)
-
             return response
 
     except IntegrityError:
-        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', EMAIL_ALREADY_EXISTS_ERROR_CODE)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', INTEGRITY_ERROR_CODE)
         return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
 
     except ValidationError:
-        error_obj = serializer.errors
-        status = error_obj['error']['status']
-        return Response(data=error_obj, status=status)
+        errors = serializer.errors
+        field_name, error_message = extract_first_error(errors, ['email', 'username', 'name', 'password'])
+        error_message = error_message.replace('This field', field_name)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, error_message, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj)
 
     except Exception:
         error_obj = get_error_message(HTTP_500_SYSTEM, 'Error! Something went wrong', SYSTEM_LEVEL_ERROR_CODE)
@@ -139,12 +131,44 @@ def refresh_access_token_view(request):
 @authentication_classes([])
 def logout_view(request):
     response = Response()
-
-    # Delete all authentication-related cookies
     response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
-    response.delete_cookie(REFRESH_TOKEN_SUPPORT_COOKIE_NAME)
+    return response
+
+@api_view(["POST"])
+def delete_user_view(request):
+    # Deletes user from the database
+    user = request.user
+    user.delete()
+
+    # Removes HTTP cookie from the browser
+    response = Response()
+    response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
 
     return response
+
+@api_view(['POST'])
+def partial_user_edit_view(request):
+    serializer = UserSerializer(instance=request.user, data=request.data, partial=True)
+
+    try:
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response()
+
+    except IntegrityError:
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use!', INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj)
+
+    except ValidationError:
+        errors = serializer.errors
+        field_name, error_message = extract_first_error(errors, ['email'])
+        error_message = error_message.replace('This field', field_name)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, error_message, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj)
+
+    except Exception as e:
+        error_obj = get_error_message(HTTP_500_SYSTEM, 'Error! Something went wrong!', SYSTEM_LEVEL_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_500_SYSTEM)
 
 
 

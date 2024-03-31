@@ -2,20 +2,17 @@ import { Fragment, useContext } from "react";
 import {Avatar, Menu, MenuList, MenuItem, MenuButton} from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
-import {UserContext} from '../context/UserProvider';
 import { LOGIN_ENDPOINT } from "../constants";
 
 export default function HeaderNavLinks(){
-    const {setToken, logout} = useContext(AuthContext);
-    const {user} = useContext(UserContext);
-
-    const logoutOnSuccess = () => setToken('');
+    const {authState, setAuthState, logout} = useContext(AuthContext);
+    const logoutOnSuccess = () => setAuthState(() => ({token:'', user:null}));
     const logoutOnError = error => console.log(error);
     const callLogout = () => logout(logoutOnSuccess, logoutOnError);
 
     return (
         <div>
-        { (user === null) ?
+        { (authState.user === null) ?
             <Fragment>
                 <Link to={LOGIN_ENDPOINT}>Log In</Link>
                 <Link to="/sign-up">Create an Account</Link>
@@ -25,7 +22,7 @@ export default function HeaderNavLinks(){
                 <Link to="/projects">Projects</Link>
                 <Menu>
                     <MenuButton>
-                        <Avatar name={user.name} src="#" />
+                        <Avatar name={authState.user?.name} src="#" />
                     </MenuButton>
                     <MenuList>
                         <MenuItem>
