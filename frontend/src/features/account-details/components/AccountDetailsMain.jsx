@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import {Box, Heading, Text} from '@chakra-ui/react';
 import AccountDetailsUserDetails from './AccountDetailsUserDetails';
 import {AuthContext} from '../../../context/AuthProvider';
+import AccountDetailsDeleteAccount from './AccountDetailsDeleteAccount';
 
 export default function AccountDetailsMain(){
     const {authState} = useContext(AuthContext);
@@ -16,6 +17,7 @@ export default function AccountDetailsMain(){
             </Text>
             <Box>
             <AccountDetailsUserDetails />
+            <AccountDetailsDeleteAccount />
             </Box>
         </Box>
     )

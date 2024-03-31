@@ -134,6 +134,18 @@ def logout_view(request):
     response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
     return response
 
+@api_view(["POST"])
+def delete_user_view(request):
+    # Deletes user from the database
+    user = request.user
+    user.delete()
+
+    # Removes HTTP cookie from the browser
+    response = Response()
+    response.delete_cookie(REFRESH_TOKEN_COOKIE_NAME)
+
+    return response
+
 @api_view(['POST'])
 def partial_user_edit_view(request):
     serializer = UserSerializer(instance=request.user, data=request.data, partial=True)

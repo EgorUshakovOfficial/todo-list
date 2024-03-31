@@ -87,6 +87,7 @@ const refreshUserToken = (onSuccess, onError) => {
 
 /*
 * Updates fields in the existing user account.
+* @param token is an access token.
 * @param data is an object filled with required user fields.
 * @param onSuccess is a callback that executes on a successful response.
 * @param onError is a callback that executes on an error response.
@@ -103,6 +104,24 @@ const updateUser = (token, data, onSuccess, onError) => {
     post('/user/partial', data, options, onSuccess, onError);
 };
 
+/*
+* Deletes user from the database.
+* @param token is an access token.
+* @param onSuccess is a callback that executes on a successful response.
+* @param onError is a callback that executes on an error response.
+*/
+const deleteUser = (token, onSuccess, onError) => {
+    const options = {
+        headers: {
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        },
+        withCredentials: true
+    };
+
+    post('/user/delete', {}, options, onSuccess, onError);
+};
+
 export  {
     login,
     logout,
@@ -110,4 +129,5 @@ export  {
     registerUser,
     updateUser,
     refreshUserToken,
+    deleteUser
 };

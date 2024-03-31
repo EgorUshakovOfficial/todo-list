@@ -1,5 +1,6 @@
 import api from './api';
 import {refreshAccessToken} from '../utils/token';
+import { LOGIN_ENDPOINT } from '../constants';
 
 const attachInterceptors = (axiosInstance, options) => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
@@ -19,9 +20,10 @@ const attachInterceptors = (axiosInstance, options) => {
     const responseInterceptor = axiosInstance.interceptors.response.use(
         response => response,
         async error => {
+            const {pathname} = window.location;
             const prevRequest = error?.config;
 
-            if (error?.response?.status === 401 && !prevRequest?.sent){
+            if (error?.response?.status === 401 && !prevRequest?.sent && pathname !== LOGIN_ENDPOINT){
                 prevRequest.sent = true;
                 try {
                     const newAccessToken = await refreshAccessToken();
