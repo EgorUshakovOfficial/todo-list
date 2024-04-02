@@ -5,7 +5,7 @@ import { updateUser } from '../../../services/userApi';
 
 export default function useAccountDetailsUserDetails(){
     const toast = useToast();
-    const {authState} = useContext(AuthContext);
+    const {authState, setAuthState} = useContext(AuthContext);
     const user = authState.user;
 
     const [name, setName] = useState({value:user.name, isReadOnly:true});
@@ -26,12 +26,15 @@ export default function useAccountDetailsUserDetails(){
         const userOnSuccess = () => {
             if (fieldName === 'email'){
                 setEmail(() => ({isReadOnly:true, value:fieldValue}));
+                setAuthState(state => ({...state, user:{...state.user, email:fieldValue}}));
             }
             else if (fieldName === 'name'){
                 setName(() => ({isReadOnly:true, value:fieldValue}));
+                setAuthState(state => ({...state, user:{...state.user, name:fieldValue}}));
             }
             else if (fieldName === 'username'){
                 setUsername(() => ({isReadOnly:true, value:fieldValue}));
+                setAuthState(state => ({...state, user:{...state.user, username:fieldValue}}));
             }
 
             toast({

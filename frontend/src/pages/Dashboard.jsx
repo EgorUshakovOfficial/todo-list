@@ -4,8 +4,7 @@ import { MainLayout } from "../containers/layouts";
 export default function UserSignUp(){
     return (
         <MainLayout>
-            <Head pageTitle="Dashboard" />
-            <div>Dashboard</div>
+            <Head pageTitle="Projects" />
         </MainLayout>
     );
 };
