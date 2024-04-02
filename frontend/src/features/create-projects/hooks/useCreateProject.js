@@ -41,9 +41,7 @@ export default function useCreateProject(){
             status:'success',
             isClosable:true
         });
-        setIsModalOpen(false);
-        setTitle('');
-        setDescription('');
+        closeModalOnClick();
     };
 
     const newProjectOnError = error => {
