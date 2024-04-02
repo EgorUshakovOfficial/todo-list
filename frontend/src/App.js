@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import AccountDetails from './pages/AccountDetails';
 import UserSignUp from './pages/UserSignUp';
 import LogIn from './pages/LogIn';
+import Projects from './pages/Projects';
 import { LOGIN_ENDPOINT } from './constants';
 
 export default function App() {
@@ -29,6 +30,8 @@ export default function App() {
               <Route element={<PrivateRoute />}>
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/profile' element={<AccountDetails />} />
+                <Route path='/projects' element={<Projects />} />
+                <Route path='/projects/:projectId' element={<div>Project detail page...</div>} />
               </Route>
             </Route>
           </Routes>
