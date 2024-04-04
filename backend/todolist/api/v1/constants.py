@@ -2,6 +2,7 @@
 HTTP_201_CREATED = 201
 HTTP_400_BAD_REQUEST=400
 HTTP_401_UNAUTHORIZED=401
+HTTP_404_NOT_FOUND = 404
 HTTP_500_SYSTEM=500
 
 # Error machine codes
@@ -11,6 +12,10 @@ INTEGRITY_ERROR_CODE='database_level'
 MISSING_REQUIRED_FIELD_ERROR_CODE='missing_required_field'
 PASSWORDS_MISMATCH_ERROR_CODE='passwords_mismatch'
 SYSTEM_LEVEL_ERROR_CODE='system_level'
+
+# Error messages
+SYSTEM_LEVEL_ERROR_MESSAGE = 'Error! Something went wrong!'
+PROJECT_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Project is not found in the database.'
 
 # AWS options
 AWS_S3_KEY_LENGTH=32

@@ -59,12 +59,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-# AWS configuration
-AWS_ACCESS_KEY_ID=config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME=config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME=config('AWS_S3_REGION_NAME')
-
 # Django Rest Framework configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -72,6 +66,12 @@ REST_FRAMEWORK = {
     ),
     'EXCEPTION_HANDLER':'api.v1.error_handler.auth_required_handler'
 }
+
+# AWS configuration
+AWS_ACCESS_KEY_ID=config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME=config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME=config('AWS_S3_REGION_NAME')
 
 AUTH_USER_MODEL = 'v1.User'
 

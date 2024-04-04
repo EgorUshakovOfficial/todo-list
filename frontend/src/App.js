@@ -3,12 +3,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import { LoginRedirector, PrivateRoute, PersistLogin } from './containers/wrappers';
+import { LOGIN_ENDPOINT } from './constants';
 import Dashboard from './pages/Dashboard';
 import AccountDetails from './pages/AccountDetails';
 import UserSignUp from './pages/UserSignUp';
 import LogIn from './pages/LogIn';
 import Projects from './pages/Projects';
-import { LOGIN_ENDPOINT } from './constants';
+import ProjectDetails from './pages/ProductDetails';
+
 
 export default function App() {
   return (
@@ -31,7 +33,7 @@ export default function App() {
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/profile' element={<AccountDetails />} />
                 <Route path='/projects' element={<Projects />} />
-                <Route path='/projects/:projectId' element={<div>Project detail page...</div>} />
+                <Route path='/projects/:projectId' element={<ProjectDetails />} />
               </Route>
             </Route>
           </Routes>
