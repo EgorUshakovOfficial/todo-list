@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Box, IconButton, Tooltip, Input, Text} from "@chakra-ui/react";
 import {EditIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons';
 
-export default function AccountDetailsUserDetailsRow({
+export default function EditField({
     fieldName,
     fieldObj,
     fieldOnChange,

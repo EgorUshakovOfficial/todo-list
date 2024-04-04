@@ -1,5 +1,5 @@
 import { Box} from "@chakra-ui/react";
-import AccountDetailsUserDetailsRow from "./AccountDetailsUserDetailsRow";
+import { EditField } from '../../../components';
 import useAccountDetailsUserDetails from "../hooks/useAccountDetailsUserDetails";
 
 export default function AccountDetailsUserDetails(){
@@ -8,21 +8,21 @@ export default function AccountDetailsUserDetails(){
 
     return (
         <Box>
-            <AccountDetailsUserDetailsRow
+            <EditField
                 fieldName="Name"
                 fieldObj={name}
                 fieldOnChange={callbackProps.nameOnChange}
                 fieldOnClick={callbackProps.nameOnClick}
                 updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('name', name.value)}
             />
-            <AccountDetailsUserDetailsRow
+            <EditField
                 fieldName="Email"
                 fieldObj={email}
                 fieldOnChange={callbackProps.emailOnChange}
                 fieldOnClick={callbackProps.emailOnClick}
                 updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('email', email.value)}
             />
-            <AccountDetailsUserDetailsRow
+            <EditField
                 fieldName="Username"
                 fieldObj={username}
                 fieldOnChange={callbackProps.usernameOnChange}

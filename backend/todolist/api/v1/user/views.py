@@ -10,7 +10,7 @@ from api.v1.utils.misc import get_error_message, generate_unique_key, upload_pro
 from api.v1.user.serializers import UserSerializer
 from api.v1.models import User
 from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, INTEGRITY_ERROR_CODE, \
-     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
+     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, SYSTEM_LEVEL_ERROR_MESSAGE,  HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -107,7 +107,7 @@ def register_user_view(request):
         return Response(data=error_obj)
 
     except Exception:
-        error_obj = get_error_message(HTTP_500_SYSTEM, 'Error! Something went wrong', SYSTEM_LEVEL_ERROR_CODE)
+        error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
         return Response(data=error_obj, status=SYSTEM_LEVEL_ERROR_CODE)
 
 @api_view(['GET'])
@@ -167,7 +167,7 @@ def partial_user_edit_view(request):
         return Response(data=error_obj)
 
     except Exception as e:
-        error_obj = get_error_message(HTTP_500_SYSTEM, 'Error! Something went wrong!', SYSTEM_LEVEL_ERROR_CODE)
+        error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
         return Response(data=error_obj, status=HTTP_500_SYSTEM)
 
 

@@ -17,3 +17,14 @@ class ProjectWorkflowSerializer(serializers.ModelSerializer):
                 'read_only': True
             }
         }
+
+    def update(self, instance, validated_data):
+        if 'title' in validated_data:
+            instance.title = validated_data.get('title')
+        if 'description' in validated_data:
+            instance.description = validated_data.get('description')
+        if 'status' in validated_data:
+            instance.status = validated_data.get('status')
+
+        instance.save()
+        return instance
