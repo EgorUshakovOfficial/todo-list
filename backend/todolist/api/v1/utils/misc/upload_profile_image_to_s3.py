@@ -11,5 +11,5 @@ def upload_profile_image_to_s3(image, key):
 
     except Exception as e:
         print(f'Error: {e}')
-        print('Failed to upload the image to the S3 bucket.')
+        ('Failed to upload the image to the S3 bucket.')
         return False

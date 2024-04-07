@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useCreateProject } from '../hooks';
 
-export default function CreateProject() {
+export default function CreateProject(props) {
   const createProjectProps = useCreateProject();
 
   const titleError = createProjectProps.errors.title;

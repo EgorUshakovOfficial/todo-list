@@ -1,5 +1,7 @@
+import { Fragment } from 'react';
 import { Box } from '@chakra-ui/react';
-import { Head } from "../components";
+import { Head, ProjectDetailsFeatureSection } from "../components";
+import { FeaturesProvider } from '../context/FeaturesProvider';
 import { MainLayout } from "../containers/layouts";
 import { DeleteProject } from "../features/delete-projects";
 import { ProductDetailsInfoCard } from '../features/edit-projects';
@@ -16,13 +18,18 @@ export default function ProjectDetails() {
             ) : error ? (
                 <div>Error! Something went wrong.</div>
             ) : (
-                <Box>
-                    <DeleteProject />
-                    <ProductDetailsInfoCard
-                        title={project.title}
-                        description={project.description}
-                    />
-                </Box>
+                <Fragment>
+                    <Box>
+                        <DeleteProject />
+                        <ProductDetailsInfoCard
+                            title={project.title}
+                            description={project.description}
+                        />
+                    </Box>
+                    <FeaturesProvider>
+                        <ProjectDetailsFeatureSection />
+                    </FeaturesProvider>
+                </Fragment>
             )}
         </MainLayout>
     );

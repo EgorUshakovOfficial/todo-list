@@ -1,7 +1,7 @@
-import ProjectsMain from "./components/ProjectsMain";
-import { ProjectsProvider } from "./context/ProjectsProvider";
+import CreateFeature from "./components/CreateFeature";
+import CreateProject from './components/CreateProject';
 
 export {
-    ProjectsMain,
-    ProjectsProvider
+    CreateFeature,
+    CreateProject
 };
