@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { AuthContext } from '../../../context/AuthProvider';
-import { ProjectsContext } from '../context/ProjectsProvider';
+import { ProjectsContext } from '../../../context/ProjectsProvider';
 import { createNewProject } from '../../../services/projectApi';
 import { PROJECT_IN_PROGRESS_STATUS } from '../../../constants';
 

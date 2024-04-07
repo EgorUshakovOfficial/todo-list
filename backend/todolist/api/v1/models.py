@@ -1,6 +1,7 @@
 import uuid
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
+from api.v1.constants import INITIAL_STATUS, PROCESS_STATUS, COMPLETE_STATUS
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -43,29 +44,41 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class ProjectWorkflow(models.Model):
     PROJECT_STATUSES = [
-        ('To-do', 'to-do'),
-        ('In-Progress', 'in-progress'),
-        ('Complete', 'complete')
+        ('In process', PROCESS_STATUS),
+        ('Complete', COMPLETE_STATUS)
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100)
     description = models.TextField()
-    status = models.CharField(max_length=11, default='in-progress', choices=PROJECT_STATUSES)
+    status = models.CharField(max_length=11, default=PROCESS_STATUS, choices=PROJECT_STATUSES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
 class Feature(models.Model):
+    FEATURE_STATUSES = [
+        ('To do', INITIAL_STATUS),
+        ('In process', PROCESS_STATUS),
+        ('Complete', COMPLETE_STATUS)
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=100)
     description = models.TextField()
+    status = models.CharField(max_length=11, default=INITIAL_STATUS, choices=FEATURE_STATUSES)
     project = models.ForeignKey(ProjectWorkflow, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
 class UserStory(models.Model):
+    USER_STORY_STATUSES = [
+        ('To do', INITIAL_STATUS),
+        ('In process', PROCESS_STATUS),
+        ('Complete', COMPLETE_STATUS)
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField()
+    status = models.CharField(max_length=11, default=INITIAL_STATUS, choices=USER_STORY_STATUSES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

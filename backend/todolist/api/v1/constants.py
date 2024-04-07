@@ -30,3 +30,8 @@ REFRESH_TOKEN_COOKIE_OPTIONS={
     'path':'/',
     'max_age':COOKIE_MAX_AGE
 }
+
+# Status configuration options
+INITIAL_STATUS = 'to-do'
+PROCESS_STATUS = 'in-progress'
+COMPLETE_STATUS = 'completed'

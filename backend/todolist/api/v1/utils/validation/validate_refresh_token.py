@@ -9,6 +9,5 @@ def validate_refresh_token(token):
         refresh_token = RefreshToken(token)
         refresh_token.verify()
         return refresh_token
-
-    except Exception as e:
+    except Exception:
         return None

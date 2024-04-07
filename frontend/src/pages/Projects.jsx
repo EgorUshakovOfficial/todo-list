@@ -1,6 +1,7 @@
 import { Head } from "../components";
 import { MainLayout } from "../containers/layouts";
-import { ProjectsMain, ProjectsProvider } from '../features/create-projects';
+import  { ProjectsProvider } from "../context/ProjectsProvider";
+import { ProjectsMain } from '../components';
 
 export default function Projects(){
     return (

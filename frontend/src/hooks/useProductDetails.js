@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import { getProjectDetails } from "../services/projectApi";
-
+import { HTTP_404_NOT_FOUND } from "../constants";
 export default function useProjectDetails(){
     const { authState } = useContext(AuthContext);
     const { projectId } = useParams();
@@ -24,7 +24,7 @@ export default function useProjectDetails(){
             const response = error?.response;
 
             // If no project details is found in the database, redirect the user back to the projects page
-            if (response.status === 404){
+            if (response.status === HTTP_404_NOT_FOUND){
                 navigate('/projects');
             }
 

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useProjects } from "../hooks";
+import { useProjects } from "../features/create-projects/hooks";
 
 const ProjectsContext = createContext({});
 

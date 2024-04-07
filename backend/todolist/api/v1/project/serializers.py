@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from api.v1.models import ProjectWorkflow
+from api.v1.constants import PROCESS_STATUS, COMPLETE_STATUS
 
 class ProjectWorkflowSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(max_length=100)  # Assuming a maximum length for status
+    status = serializers.CharField(max_length=11)
 
     def validate_status(self, value):
-        if value not in ['in-progress', 'completed', 'to-do']:
+        if value not in [PROCESS_STATUS, COMPLETE_STATUS]:
             raise serializers.ValidationError("Invalid status value.")
         return value
 

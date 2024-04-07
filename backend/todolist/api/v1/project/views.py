@@ -17,7 +17,6 @@ def retrieve_project_list_view(request):
 @api_view(['GET'])
 def retrieve_project_view(request, project_id):
     try:
-        print(request.user)
         project_instance = ProjectWorkflow.objects.get(user=request.user.id, id=project_id)
         serializer = ProjectWorkflowSerializer(project_instance)
         return Response(data=serializer.data)
