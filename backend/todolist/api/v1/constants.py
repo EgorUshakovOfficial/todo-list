@@ -16,6 +16,7 @@ SYSTEM_LEVEL_ERROR_CODE='system_level'
 # Error messages
 SYSTEM_LEVEL_ERROR_MESSAGE = 'Error! Something went wrong!'
 PROJECT_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Project is not found in the database.'
+FEATURE_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Feature is not found in the database.'
 
 # AWS options
 AWS_S3_KEY_LENGTH=32

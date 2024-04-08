@@ -10,6 +10,17 @@ class FeatureSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Status is invalid.')
         return value
 
+    def update(self, instance, validated_data):
+        if 'name' in validated_data:
+            instance.name = validated_data.get('name')
+        if 'description' in validated_data:
+            instance.description = validated_data.get('description')
+        if 'status' in validated_data:
+            instance.status = validated_data.get('status')
+
+        instance.save()
+        return instance
+
     class Meta:
         model = Feature
         fields = [ 'id', 'name', 'description', 'status' ]
