@@ -39,8 +39,30 @@ const getFeatures = (projectId, token, onSuccess, onError) => {
     get(`/projects/${projectId}/features/`, options, onSuccess, onError);
 };
 
+/*
+* Edits fields of an exist feature.
+* @param featureId is a UUID associated with a specific project.
+* @param projectId is a UUID associated with a specific project.
+* @param token is an access token.
+* @param data is an object consisting of name and description fields, e.g. {name:"Feature A", description:"description"}
+* @param onSuccess is a callback that executes on a successful response.
+* @param onError is a callback that executes on an error response.
+*/
+const editFeature = (featureId, projectId, token, data, onSuccess, onError) => {
+    const options = {
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        withCredentials: true
+    };
+
+    post(`/projects/${projectId}/features/${featureId}/partial`, data, options, onSuccess, onError);
+};
+
 
 export {
     createFeature,
-    getFeatures
+    getFeatures,
+    editFeature
 };

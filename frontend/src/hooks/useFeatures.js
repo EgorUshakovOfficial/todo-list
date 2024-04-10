@@ -13,6 +13,7 @@ export default function useFeatures(){
 
     const [features, setFeatures] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [activeFeature, setActiveFeature] = useState(null);
     const [error, setError] = useState(null);
 
     const featuresOnSuccess = response => {
@@ -48,6 +49,8 @@ export default function useFeatures(){
         isLoading,
         setIsLoading,
         error,
-        setError
+        setError,
+        activeFeature,
+        setActiveFeature
     };
 }

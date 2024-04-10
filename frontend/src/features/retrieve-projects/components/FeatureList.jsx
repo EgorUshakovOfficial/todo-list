@@ -10,7 +10,9 @@ export default function FeatureList({ features }) {
                 features.map(feature => (
                     <Feature
                         key={feature.id}
+                        id={feature.id}
                         name={feature.name}
+                        description={feature.description}
                         numUserStories={3}
                     />
                 ))

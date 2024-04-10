@@ -9,5 +9,5 @@ export {
     Head,
     Header,
     ProjectDetailsFeatureSection,
-    ProjectsMain
+    ProjectsMain,
 };

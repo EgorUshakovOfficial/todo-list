@@ -7,7 +7,7 @@ from api.v1.feature.serializers import FeatureSerializer
 from api.v1.models import Feature, ProjectWorkflow
 from api.v1.utils.misc import get_error_message, extract_first_error
 from api.v1.constants import HTTP_404_NOT_FOUND, HTTP_500_SYSTEM, HTTP_400_BAD_REQUEST,  INTEGRITY_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, \
-    SYSTEM_LEVEL_ERROR_MESSAGE, PROJECT_NOT_FOUND_DATABASE_ERROR_MESSAGE
+    SYSTEM_LEVEL_ERROR_MESSAGE, PROJECT_NOT_FOUND_DATABASE_ERROR_MESSAGE, FEATURE_NOT_FOUND_DATABASE_ERROR_MESSAGE
 
 @api_view(["POST"])
 def create_feature_view(request, project_id):
@@ -57,3 +57,32 @@ def retrieve_features_view(request, project_id):
     except Exception:
         error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
         return Response(data=error_obj, status=HTTP_500_SYSTEM)
+
+@api_view(['POST'])
+def partial_edit_feature_view(request, project_id, feature_id):
+    try:
+        feature_instance = Feature.objects.get(
+            id=feature_id,
+            user=request.user.id,
+            project=project_id,
+        )
+        serializer = FeatureSerializer(instance=feature_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=serializer.data)
+
+    except ObjectDoesNotExist:
+        error_obj = get_error_message(HTTP_404_NOT_FOUND, FEATURE_NOT_FOUND_DATABASE_ERROR_MESSAGE, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_404_NOT_FOUND)
+
+    except ValidationError:
+        errors = serializer.errors
+        field_name, error_message = extract_first_error(errors, ['name', 'description', 'status'])
+        error_message = error_message.replace('This field', field_name)
+        error_obj = get_error_message(HTTP_400_BAD_REQUEST, error_message, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_400_BAD_REQUEST)
+
+    except Exception:
+        error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_500_SYSTEM)
+
