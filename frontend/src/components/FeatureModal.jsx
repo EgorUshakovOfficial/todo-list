@@ -11,20 +11,17 @@ import {
 } from "@chakra-ui/react";
 import { FeaturesContext } from '../context/FeaturesProvider';
 import { FeatureDetailsInfoCard } from '../features/edit-projects';
-import useModal from "../hooks/useModal";
+import { DeleteFeature } from '../features/delete-projects';
+import useFeatureModal from '../hooks/useFeatureModal';
 
 export default function FeatureModal(){
-  const { activeFeature, setActiveFeature } = useContext(FeaturesContext);
+  const { activeFeature } = useContext(FeaturesContext);
 
-  const {isModalOpen, closeModalOnClick} = useModal();
-
-  const featureOnClose = () => {
-    closeModalOnClick();
-    setActiveFeature(null);
-  }
+  const featureModalProps = useFeatureModal();
+  const featureOnClose = featureModalProps.featureOnClose;
 
   return (
-    <Modal isOpen={isModalOpen} onClose={featureOnClose}>
+    <Modal isOpen={featureModalProps.isModalOpen} onClose={featureOnClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader></ModalHeader>
@@ -37,10 +34,11 @@ export default function FeatureModal(){
           />
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={featureOnClose}>
+
+          <Button colorScheme="ghost" mr={3} onClick={featureOnClose}>
             Close
           </Button>
-          <Button variant="ghost">Secondary Action</Button>
+          <DeleteFeature id={activeFeature.id} />
         </ModalFooter>
       </ModalContent>
     </Modal>
