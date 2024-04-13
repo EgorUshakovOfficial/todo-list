@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import { AuthContext } from '../../../context/AuthProvider';
+import { FeaturesContext } from '../../../context/FeaturesProvider';
 import { editFeature } from '../../../services/featureApi';
 import { HTTP_404_NOT_FOUND } from '../../../constants';
 
@@ -11,6 +12,7 @@ export default function useFeatureDetailsInfoCard(initialState){
     const toast = useToast();
 
     const { authState } = useContext(AuthContext);
+    const { features, setFeatures } = useContext(FeaturesContext);
 
     const [name, setName] = useState({ value:initialState.name, isReadOnly:true});
     const [description, setDescription] = useState({value:initialState.description, isReadOnly:true});
@@ -34,6 +36,16 @@ export default function useFeatureDetailsInfoCard(initialState){
                 setDescription({ value: fieldValue, isReadOnly: true });
             }
 
+            const updatedFeatureIdx = features.findIndex(feature => feature.id === featureId);
+            setFeatures(features => {
+                return features.map((feature, index) => {
+                    if ( index === updatedFeatureIdx){
+                        return {...feature, ...data};
+                    }
+                    return feature;
+                });
+            });
+
             toast({
                 title: `${fieldName} has been successfully updated!`,
                 status:'success',
@@ -53,6 +65,7 @@ export default function useFeatureDetailsInfoCard(initialState){
 
         editFeature(featureId, projectId, accessToken, data, featureOnSuccess, featureOnError);
     };
+
     return {
         name,
         description,

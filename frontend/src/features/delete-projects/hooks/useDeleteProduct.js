@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import { AuthContext } from '../../../context/AuthProvider';
 import { deleteProject } from '../../../services/projectApi';
+import { HTTP_404_NOT_FOUND } from '../../../constants';
 
 export default function useDeleteProduct(){
     const { authState } = useContext(AuthContext);
@@ -29,7 +30,7 @@ export default function useDeleteProduct(){
 
     const projectOnError = error => {
         const response = error?.response;
-        const title = (response.status === 404) ? 'Error! Product has already been deleted' : 'Error! Something went wrong.';
+        const title = (response.status === HTTP_404_NOT_FOUND) ? 'Error! Product has already been deleted' : 'Error! Something went wrong.';
         closeModelOnClick();
         navigate('/projects');
         toast({
