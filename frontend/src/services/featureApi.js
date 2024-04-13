@@ -60,9 +60,30 @@ const editFeature = (featureId, projectId, token, data, onSuccess, onError) => {
     post(`/projects/${projectId}/features/${featureId}/partial`, data, options, onSuccess, onError);
 };
 
+/*
+* Deletes an existing feature.
+* @param featureId is a UUID associated with a specific feature.
+* @param token is an access token.
+* @param onSuccess is a callback that executes on a successful response.
+* @param onError is a callback that executes on an error response.
+*/
+const deleteFeature = (featureId, projectId, token, onSuccess, onError) => {
+    const options = {
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        withCredentials: true
+    };
+
+    const data = {};
+
+    post(`/projects/${projectId}/features/${featureId}/delete`, data, options, onSuccess, onError);
+};
 
 export {
     createFeature,
     getFeatures,
-    editFeature
+    editFeature,
+    deleteFeature
 };
