@@ -1,3 +1,7 @@
+import DeleteFeature from './components/DeleteFeature';
 import DeleteProject from './components/DeleteProject';
 
-export { DeleteProject };
+export {
+    DeleteFeature,
+    DeleteProject
+};

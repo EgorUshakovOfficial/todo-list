@@ -86,3 +86,21 @@ def partial_edit_feature_view(request, project_id, feature_id):
         error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
         return Response(data=error_obj, status=HTTP_500_SYSTEM)
 
+@api_view(['POST'])
+def delete_feature_view(request, project_id, feature_id):
+    try:
+        Feature.objects.get(
+            id=feature_id,
+            project=project_id,
+            user=request.user.id
+        ).delete()
+        return Response()
+
+    except ObjectDoesNotExist:
+        error_obj = get_error_message(HTTP_404_NOT_FOUND, FEATURE_NOT_FOUND_DATABASE_ERROR_MESSAGE, INTEGRITY_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        print(e)
+        error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_500_SYSTEM)
