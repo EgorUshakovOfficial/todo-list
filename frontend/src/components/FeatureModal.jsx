@@ -10,6 +10,7 @@ import {
     ModalCloseButton
 } from "@chakra-ui/react";
 import { FeaturesContext } from '../context/FeaturesProvider';
+import { CreateUserStory } from '../features/create-projects';
 import { FeatureDetailsInfoCard } from '../features/edit-projects';
 import { DeleteFeature } from '../features/delete-projects';
 import useFeatureModal from '../hooks/useFeatureModal';
@@ -32,9 +33,9 @@ export default function FeatureModal(){
             name={activeFeature.name}
             description={activeFeature.description}
           />
+          <CreateUserStory />
         </ModalBody>
         <ModalFooter>
-
           <Button colorScheme="ghost" mr={3} onClick={featureOnClose}>
             Close
           </Button>

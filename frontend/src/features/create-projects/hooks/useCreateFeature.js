@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthProvider';
 import { FeaturesContext } from '../../../context/FeaturesProvider';
-import { FEATURE_INITIAL_STATUS, HTTP_400_BAD_REQUEST } from '../../../constants';
+import { INITIAL_STATUS } from '../../../constants';
 import { createFeature } from '../../../services/featureApi';
 
 export default function useCreateFeature(){
@@ -51,7 +51,7 @@ export default function useCreateFeature(){
         const data = {
             name,
             description,
-            status: FEATURE_INITIAL_STATUS
+            status: INITIAL_STATUS
         };
 
         if (validateFeatureData(data)){

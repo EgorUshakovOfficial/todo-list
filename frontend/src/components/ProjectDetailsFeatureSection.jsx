@@ -3,15 +3,15 @@ import { Box, Text } from '@chakra-ui/react';
 import { CreateFeature } from '../features/create-projects';
 import { FeatureList } from '../features/retrieve-projects';
 import { FeaturesContext } from '../context/FeaturesProvider';
-import { FEATURE_INITIAL_STATUS, FEATURE_PROGRESS_STATUS, FEATURE_COMPLETE_STATUS } from '../constants';
+import { INITIAL_STATUS, PROGRESS_STATUS, COMPLETE_STATUS } from '../constants';
 import FeatureModal from './FeatureModal';
 
 export default function ProjectDetailsFeatureSection() {
     const { features, isLoading, error, activeFeature } = useContext(FeaturesContext);
 
-    const todoFeatures = features.filter(feature => feature?.status === FEATURE_INITIAL_STATUS);
-    const progressFeatures = features.filter(feature => feature?.status === FEATURE_PROGRESS_STATUS);
-    const completeFeatures = features.filter(feature => feature?.status === FEATURE_COMPLETE_STATUS);
+    const todoFeatures = features.filter(feature => feature?.status === INITIAL_STATUS);
+    const progressFeatures = features.filter(feature => feature?.status === PROGRESS_STATUS);
+    const completeFeatures = features.filter(feature => feature?.status === COMPLETE_STATUS);
 
     return (
         <Box>
