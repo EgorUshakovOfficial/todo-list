@@ -1,6 +1,6 @@
 import { Box, Text} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { formatStatus } from '../../../utils/projects';
+import { formatStatus } from '../../utils/projects';
 
 export default function Project(props){
     const { id, title, description, status } = props;

@@ -37,6 +37,7 @@ export default function useFeatureDetailsInfoCard(initialState){
             }
 
             const updatedFeatureIdx = features.findIndex(feature => feature.id === featureId);
+
             setFeatures(features => {
                 return features.map((feature, index) => {
                     if ( index === updatedFeatureIdx){

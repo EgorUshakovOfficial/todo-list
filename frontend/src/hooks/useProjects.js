@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../../context/AuthProvider";
-import { getProjectWorkflows } from "../../../services/projectApi";
+import { AuthContext } from "../context/AuthProvider";
+import { getProjectWorkflows } from "../services/projectApi";
 
 export default function useProjects(){
     const {authState} = useContext(AuthContext);

@@ -90,7 +90,7 @@ def partial_edit_feature_view(request, project_id, feature_id):
 def delete_feature_view(request, project_id, feature_id):
     try:
         Feature.objects.get(
-            id=feature_id,
+        id=feature_id,
             project=project_id,
             user=request.user.id
         ).delete()

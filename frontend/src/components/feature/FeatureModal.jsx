@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {
+    Accordion,
     Button,
     Modal,
     ModalOverlay,
@@ -9,11 +10,13 @@ import {
     ModalBody,
     ModalCloseButton
 } from "@chakra-ui/react";
-import { FeaturesContext } from '../context/FeaturesProvider';
-import { CreateUserStory } from '../features/create-projects';
-import { FeatureDetailsInfoCard } from '../features/edit-projects';
-import { DeleteFeature } from '../features/delete-projects';
-import useFeatureModal from '../hooks/useFeatureModal';
+import { FeaturesContext } from '../../context/FeaturesProvider';
+import { UserStoriesProvider } from '../../context/UserStoriesProvider';
+import { CreateUserStory } from '../../features/create-projects';
+import { FeatureDetailsInfoCard } from '../../features/edit-projects';
+import { DeleteFeature } from '../../features/delete-projects';
+import UserStoryList from '../userstory/UserStoryList';
+import useFeatureModal from '../../hooks/useFeatureModal';
 
 export default function FeatureModal(){
   const { activeFeature } = useContext(FeaturesContext);
@@ -33,7 +36,12 @@ export default function FeatureModal(){
             name={activeFeature.name}
             description={activeFeature.description}
           />
-          <CreateUserStory />
+          <UserStoriesProvider>
+            <Accordion allowToggle>
+              <UserStoryList />
+              <CreateUserStory />
+            </Accordion>
+          </UserStoriesProvider>
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="ghost" mr={3} onClick={featureOnClose}>

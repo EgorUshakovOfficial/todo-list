@@ -79,6 +79,8 @@ ROOT_URLCONF = 'todolist.urls'
 
 WSGI_APPLICATION = 'todolist.wsgi.application'
 
+APPEND_SLASH = False
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import { refreshUserToken, getUser } from "../../services/userApi";
-import { LOGIN_ENDPOINT } from "../../constants";
+import { HTTP_401_UNAUTHORIZED_ACCESS, LOGIN_ENDPOINT } from "../../constants";
 
 export default function PersistLogin(){
     const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +20,13 @@ export default function PersistLogin(){
                 setIsLoading(false);
             };
 
-            const userOnError = error => console.log(error);
+            const userOnError = error => {
+                const response = error?.response;
+                if (response.status === HTTP_401_UNAUTHORIZED_ACCESS){
+                    navigate(LOGIN_ENDPOINT);
+                    setIsLoading(false);
+                }
+            };
 
             getUser(token, userOnSuccess, userOnError);
         }

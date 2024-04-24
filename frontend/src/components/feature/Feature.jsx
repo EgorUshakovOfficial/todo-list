@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-import useFeature from '../hooks/useFeature';
+import useFeature from '../../hooks/useFeature';
 
 export default function Feature({ id, name, description, numUserStories }){
     const { updateActiveFeatureOnClick } = useFeature({ id, name, description });

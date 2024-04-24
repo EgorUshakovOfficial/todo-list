@@ -6,4 +6,5 @@ export const INITIAL_STATUS = 'to-do';
 export const PROGRESS_STATUS = 'in-progress';
 export const COMPLETE_STATUS = 'completed';
 export const HTTP_404_NOT_FOUND = 404;
+export const HTTP_401_UNAUTHORIZED_ACCESS = 401;
 export const HTTP_400_BAD_REQUEST = 400;

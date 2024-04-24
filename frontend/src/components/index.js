@@ -1,8 +1,9 @@
 import EditField from './EditField';
-import Header from './Header';
-import Head from './Head';
-import ProjectDetailsFeatureSection from './ProjectDetailsFeatureSection';
-import ProjectsMain from './ProjectsMain';
+import Header from './header/Header';
+import Head from './header/Head';
+import ProjectDetailsFeatureSection from './projectworkflow/ProjectDetailsFeatureSection';
+import ProjectsMain from './projectworkflow/ProjectsMain';
+import UserStory from './userstory/UserStory';
 
 export {
     EditField,
@@ -10,4 +11,5 @@ export {
     Header,
     ProjectDetailsFeatureSection,
     ProjectsMain,
+    UserStory
 };

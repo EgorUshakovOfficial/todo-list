@@ -77,6 +77,7 @@ class UserStory(models.Model):
         ('Complete', COMPLETE_STATUS)
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     status = models.CharField(max_length=11, default=INITIAL_STATUS, choices=USER_STORY_STATUSES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -85,12 +86,19 @@ class UserStory(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
 
 class DeveloperTask(models.Model):
+    DEVELOPER_TASK_STATUSES = [
+        ('To do', INITIAL_STATUS),
+        ('Complete', COMPLETE_STATUS)
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField()
+    status = models.CharField(max_length=11, default=INITIAL_STATUS, choices=DEVELOPER_TASK_STATUSES)
     user_story = models.ForeignKey(UserStory, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+
 
 
 

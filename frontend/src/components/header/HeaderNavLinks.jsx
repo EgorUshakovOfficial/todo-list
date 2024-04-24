@@ -1,8 +1,8 @@
 import { Fragment, useContext } from "react";
 import {Avatar, Menu, MenuList, MenuItem, MenuButton} from '@chakra-ui/react';
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthProvider";
-import { LOGIN_ENDPOINT } from "../constants";
+import { AuthContext } from "../../context/AuthProvider";
+import { LOGIN_ENDPOINT } from "../../constants";
 
 export default function HeaderNavLinks(){
     const {authState, setAuthState, logout} = useContext(AuthContext);

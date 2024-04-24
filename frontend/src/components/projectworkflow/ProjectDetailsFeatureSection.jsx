@@ -1,10 +1,10 @@
 import { useContext, Fragment } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { CreateFeature } from '../features/create-projects';
-import { FeatureList } from '../features/retrieve-projects';
-import { FeaturesContext } from '../context/FeaturesProvider';
-import { INITIAL_STATUS, PROGRESS_STATUS, COMPLETE_STATUS } from '../constants';
-import FeatureModal from './FeatureModal';
+import { CreateFeature } from '../../features/create-projects';
+import FeatureList from '../feature/FeatureList';
+import { FeaturesContext } from '../../context/FeaturesProvider';
+import { INITIAL_STATUS, PROGRESS_STATUS, COMPLETE_STATUS } from '../../constants';
+import FeatureModal from '../feature/FeatureModal';
 
 export default function ProjectDetailsFeatureSection() {
     const { features, isLoading, error, activeFeature } = useContext(FeaturesContext);

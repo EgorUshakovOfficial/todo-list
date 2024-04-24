@@ -17,6 +17,8 @@ SYSTEM_LEVEL_ERROR_CODE='system_level'
 SYSTEM_LEVEL_ERROR_MESSAGE = 'Error! Something went wrong!'
 PROJECT_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Project is not found in the database.'
 FEATURE_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Feature is not found in the database.'
+USER_STORY_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'User story is not found in the database.'
+DEVELOPER_TASK_NOT_FOUND_DATABASE_ERROR_MESSAGE = 'Developer task is not found in the database.'
 
 # AWS options
 AWS_S3_KEY_LENGTH=32
