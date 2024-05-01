@@ -7,7 +7,7 @@ export default function EditUserStoryName(props){
 
     return (
         <EditField
-            fieldName="User Story Name:"
+            fieldName="name"
             fieldObj={name}
             fieldOnChange={callbackProps.nameOnChange}
             fieldOnClick={callbackProps.nameOnClick}

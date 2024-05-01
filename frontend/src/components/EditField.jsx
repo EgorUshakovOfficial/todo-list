@@ -10,8 +10,11 @@ export default function EditField({
     updateFieldValueOnClick
 }){
     return (
-        <Box>
-            <Text>{fieldName}</Text>
+        <Box
+            display="flex"
+            alignItems="center"
+            gap="0.5em"
+        >
             {fieldObj.isReadOnly ?
                 <Fragment>
                     <Text>{fieldObj.value}</Text>
@@ -28,7 +31,10 @@ export default function EditField({
                         value={fieldObj.value}
                         onChange={fieldOnChange}
                     />
-                    <Box>
+                    <Box
+                        display="flex"
+                        gap="0.25em"
+                    >
                         <Tooltip label={`Save ${fieldName}`}>
                             <IconButton
                                 icon={<CheckIcon />}

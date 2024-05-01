@@ -7,7 +7,16 @@ export default function Project(props){
     const projectStatus = formatStatus(status);
     return (
         <Link to={`/projects/${id}`}>
-            <Box mt="4">
+            <Box
+                mt="2"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                border="1px solid lightgray"
+                padding="1em"
+                borderRadius="0.5em"
+                gap="0.5em"
+            >
                 <Text>{title}</Text>
                 <Text>{description}</Text>
                 <Text>{projectStatus}</Text>

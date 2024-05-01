@@ -1,5 +1,5 @@
 import { Fragment, useContext } from 'react';
-import { Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { ProjectsContext } from '../../context/ProjectsProvider';
 import Project from './Project';
 

@@ -7,16 +7,19 @@ export default function ProductDetailsInfoCard(props){
     const { title, description, ...callbackProps } = projectDetailsInfoCardProps;
 
     return (
-        <Box>
+        <Box
+            display="grid"
+            rowGap="1em"
+        >
             <EditField
-                fieldName="Title"
+                fieldName="title"
                 fieldObj={title}
                 fieldOnChange={callbackProps.titleOnChange}
                 fieldOnClick={callbackProps.titleOnClick}
                 updateFieldValueOnClick={() => callbackProps.updateFieldValueOnClick("title", title.value)}
             />
             <EditField
-                fieldName="Description"
+                fieldName="description"
                 fieldObj={description}
                 fieldOnChange={callbackProps.descriptionOnChange}
                 fieldOnClick={callbackProps.descriptionOnClick}

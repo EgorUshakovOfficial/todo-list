@@ -40,6 +40,12 @@ export default function useCreateDeveloperTask(initialState){
                 return story;
             })
         });
+
+        toast({
+            title:'New developer task has been successfully created!',
+            status: 'success',
+            isClosable: true,
+        });
     };
 
     const userStoryOnError = () => {
@@ -62,6 +68,8 @@ export default function useCreateDeveloperTask(initialState){
             const accessToken = authState.token;
             createDeveloperTask(userStoryId, accessToken, data, userStoryOnSuccess, userStoryOnError);
         }
+
+        setDescription('');
     }
 
     return {

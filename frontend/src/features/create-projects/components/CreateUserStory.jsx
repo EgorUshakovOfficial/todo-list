@@ -7,6 +7,7 @@ import {
     Input,
     Textarea,
     Button,
+    Form,
     FormControl,
     FormErrorMessage
 } from '@chakra-ui/react';
@@ -19,18 +20,27 @@ export default function CreateUserStory(){
     const descriptionError = createUserStoryProps.errors.description;
 
     return (
-        <Accordion allowToggle>
+        <Accordion
+            borderInline="1px solid #E2E8F0"
+            borderRadius="0.25em"
+            allowToggle
+        >
             <AccordionItem>
-                <h2>
+                <Box as="h2">
                     <AccordionButton onClick={createUserStoryProps.toggleAccordion}>
                         <Box as="span" flex='1' textAlign='left'>
                             Add User Story
                         </Box>
                         {createUserStoryProps.isAccordionOpen ? <MinusIcon /> : <AddIcon />}
                     </AccordionButton>
-                </h2>
+                </Box>
                 <AccordionPanel pb={4}>
-                    <form onSubmit={createUserStoryProps.formOnSubmit}>
+                    <Box
+                        as="form"
+                        display="grid"
+                        rowGap="0.25em"
+                        onSubmit={createUserStoryProps.formOnSubmit}
+                    >
                         <FormControl isInvalid={nameError}>
                             <Input
                                 name="name"
@@ -46,14 +56,13 @@ export default function CreateUserStory(){
                                 placeholder="Description"
                                 value={createUserStoryProps.description}
                                 onChange={createUserStoryProps.descriptionOnChange}
-                                mb={4}
                             />
                             <FormErrorMessage>{descriptionError}</FormErrorMessage>
                         </FormControl>
                         <Button type="submit" colorScheme="blue">
                             Submit
                         </Button>
-                    </form>
+                    </Box>
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>

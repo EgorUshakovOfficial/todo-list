@@ -1,20 +1,22 @@
 import {useContext, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthProvider';
 import { validateEmail, validatePassword, validateUsername } from '../../../utils/validate';
 import { getUser } from '../../../services/userApi';
 
 export default function useUserSignup(){
+    const navigate = useNavigate();
+
+    const toast = useToast();
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [profileImage, setProfileImage] = useState(null);
     const [errors, setErrors] = useState({ email:'', username:'', password:'' });
     const {registerUser, setAuthState} = useContext(AuthContext);
-    const toast = useToast();
-    const navigate = useNavigate();
+
 
     const nameOnChange = event =>  {
         setErrors(({name, ...otherErrors}) => ({name:'', ...otherErrors}));
@@ -35,13 +37,6 @@ export default function useUserSignup(){
         setErrors(({password, ...otherErrors}) => ({password:'', ...otherErrors}));
         setPassword(event.target.value);
     }
-
-    const profileImageOnChange = event => {
-        const file = event.target.files[0];
-        if (file){
-            setProfileImage(file);
-        };
-    };
 
     const validateUserData = data => {
         // Initialize form field errors for user data
@@ -73,9 +68,12 @@ export default function useUserSignup(){
         fetchUser();
     };
 
-    const registerOnError = error => {
-        // Handle errors according to the error object here...
-        console.error(error);
+    const registerOnError = () => {
+        toast({
+            title: 'Something went wrong! Please try again.',
+            status:'error',
+            isCloseable:true
+        });
     };
 
     const submitUserSignUpForm = () => {
@@ -83,8 +81,7 @@ export default function useUserSignup(){
             email,
             username,
             name,
-            password,
-            profileImage
+            password
         };
 
         if (validateUserData(userData) === false){
@@ -106,13 +103,11 @@ export default function useUserSignup(){
         email,
         username,
         password,
-        profileImage,
         errors,
         nameOnChange,
         emailOnChange,
         usernameOnChange,
         passwordOnChange,
-        profileImageOnChange,
         submitUserSignUpForm
     };
 

@@ -19,7 +19,12 @@ export default function ProjectDetails() {
                 <div>Error! Something went wrong.</div>
             ) : (
                 <Fragment>
-                    <Box>
+                    <Box
+                        width="100%"
+                        display="flex"
+                        flexDirection="row-reverse"
+                        justifyContent="space-between"
+                    >
                         <DeleteProject />
                         <ProductDetailsInfoCard
                             title={project.title}

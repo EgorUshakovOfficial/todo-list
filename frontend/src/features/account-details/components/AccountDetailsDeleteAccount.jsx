@@ -7,7 +7,7 @@ export default function AccountDetailsDeleteAccount(){
 
     return (
         <Fragment>
-            <Button colorScheme="red" onClick={deleteUserProps.openDeleteUserModal}>
+            <Button mt="2" colorScheme="red" onClick={deleteUserProps.openDeleteUserModal}>
                 Delete
             </Button>
             <Modal isOpen={deleteUserProps.deleteUserModalOpen} onClose={deleteUserProps.closeDeleteUserModal}>

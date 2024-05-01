@@ -10,7 +10,7 @@ from api.v1.utils.misc import get_error_message, generate_unique_key, upload_pro
 from api.v1.user.serializers import UserSerializer
 from api.v1.models import User
 from api.v1.constants import MISSING_REQUIRED_FIELD_ERROR_CODE, INVALID_ACCESS_ERROR_CODE, SYSTEM_LEVEL_ERROR_CODE, REFRESH_TOKEN_ERROR_CODE, INTEGRITY_ERROR_CODE, \
-     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, SYSTEM_LEVEL_ERROR_MESSAGE,  HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_SYSTEM
+     REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS, SYSTEM_LEVEL_ERROR_MESSAGE,  HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND, HTTP_500_SYSTEM
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -50,50 +50,36 @@ def login_view(request):
 @api_view(['POST'])
 @authentication_classes([])
 def register_user_view(request):
+    serializer = UserSerializer(data=request.data)
+
     try:
-        data = request.data
-
         # Validates email, username, and name in the body of the request
-        serializer = UserSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
 
-        if serializer.is_valid(raise_exception=True):
-            profile_image = data.get('profileImage', None)
-            profile_image_url = ''
+        # Creates new user in the database
+        validated_data = serializer.validated_data
+        user_instance = User.objects.create_user(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            name=validated_data['name'],
+            password=validated_data['password'],
+            profile_image_url=''
+        )
 
-            # If a profile image is uploaded, save it to the AWS S3 bucket
-            if profile_image and profile_image != "null":
-                filename = profile_image.name
-                key = generate_unique_key(filename)
-                is_upload_success = upload_profile_image_to_s3(profile_image, key)
+        # Generates access and refresh tokens
+        tokens = get_tokens_for_user(user_instance)
+        access_token = tokens['access']
+        response = Response({'access':access_token})
 
-                # If the upload to the S3 bucket is successful, update the profile image url
-                if is_upload_success:
-                    profile_image_url = f'https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/profile-images/{key}'
+        # Sets refresh token as a HTTP only cookie
+        refresh_token = tokens['refresh']
+        response.set_cookie(
+            REFRESH_TOKEN_COOKIE_NAME,
+            refresh_token,
+            **REFRESH_TOKEN_COOKIE_OPTIONS
+        )
 
-            # Creates new user in the database
-            validated_data = serializer.validated_data
-            user_instance = User.objects.create_user(
-                email=validated_data['email'],
-                username=validated_data['username'],
-                name=validated_data['name'],
-                password=validated_data['password'],
-                profile_image_url=profile_image_url
-            )
-
-            # Generates access and refresh tokens
-            tokens = get_tokens_for_user(user_instance)
-            access_token = tokens['access']
-            response = Response({'access':access_token})
-
-            # Sets refresh token as a HTTP only cookie
-            refresh_token = tokens['refresh']
-            response.set_cookie(
-                REFRESH_TOKEN_COOKIE_NAME,
-                refresh_token,
-                **REFRESH_TOKEN_COOKIE_OPTIONS
-            )
-
-            return response
+        return response
 
     except IntegrityError:
         error_obj = get_error_message(HTTP_400_BAD_REQUEST, 'Email is already in use.', INTEGRITY_ERROR_CODE)
@@ -104,11 +90,12 @@ def register_user_view(request):
         field_name, error_message = extract_first_error(errors, ['email', 'username', 'name', 'password'])
         error_message = error_message.replace('This field', field_name)
         error_obj = get_error_message(HTTP_400_BAD_REQUEST, error_message, INTEGRITY_ERROR_CODE)
-        return Response(data=error_obj)
+        return Response(data=error_obj, status=HTTP_404_NOT_FOUND)
 
-    except Exception:
+    except Exception as e:
+        print(e)
         error_obj = get_error_message(HTTP_500_SYSTEM, SYSTEM_LEVEL_ERROR_MESSAGE, SYSTEM_LEVEL_ERROR_CODE)
-        return Response(data=error_obj, status=SYSTEM_LEVEL_ERROR_CODE)
+        return Response(data=error_obj, status=HTTP_500_SYSTEM)
 
 @api_view(['GET'])
 def retrieve_user_view(request):

@@ -15,7 +15,11 @@ export default function UserStoryList(){
     }
 
     return (
-        <Box>
+        <Box
+            display="grid"
+            rowGap="0.25em"
+            marginBlock="1em"
+        >
             {(stories.length === 0) ?
                 <Text>No stories are currently available.</Text>
                 :

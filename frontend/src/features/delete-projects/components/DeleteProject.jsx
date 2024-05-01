@@ -8,7 +8,7 @@ export default function DeleteProject(){
     return (
         <Fragment>
             <Button colorScheme="red" onClick={deleteProductProps.openModelOnClick}>
-                Delete
+                Delete Project
             </Button>
             <Modal isOpen={deleteProductProps.isModelOpen} onClose={deleteProductProps.closeModelOnClick}>
                 <ModalOverlay />

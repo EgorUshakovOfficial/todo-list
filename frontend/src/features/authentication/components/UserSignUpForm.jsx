@@ -49,26 +49,6 @@ export default function UserSignUpForm(){
                 />
                 <FormErrorMessage>{userSignUpProps.errors.password}</FormErrorMessage>
             </FormControl>
-            <FormControl mt={4}>
-                <FormLabel>Profile Picture</FormLabel>
-                <Button>Choose File</Button>
-                <Input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={userSignUpProps.profileImageOnChange}
-                />
-            </FormControl>
-            {(userSignUpProps.profileImage !== null) && (
-                <Box>
-                    <img
-                        src={URL.createObjectURL(userSignUpProps.profileImage)}
-                        alt="Selected Profile Pic"
-                        style={{}}
-                    />
-                    <Button colorScheme="teal">Upload</Button>
-                </Box>
-            )}
             <Button mt={4} colorScheme="teal" onClick={userSignUpProps.submitUserSignUpForm}>Submit</Button>
         </Box>
     );

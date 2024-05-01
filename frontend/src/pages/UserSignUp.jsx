@@ -6,7 +6,6 @@ export default function UserSignUp(){
     return (
         <MainLayout>
             <Head pageTitle="Registration" />
-            <h2>Create an Account</h2>
             <UserSignUpForm />
         </MainLayout>
     );

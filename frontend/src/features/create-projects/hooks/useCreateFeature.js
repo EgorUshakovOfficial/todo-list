@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthProvider';
 import { FeaturesContext } from '../../../context/FeaturesProvider';
@@ -8,6 +9,8 @@ import { createFeature } from '../../../services/featureApi';
 export default function useCreateFeature(){
     const { authState } = useContext(AuthContext);
     const { setFeatures } = useContext(FeaturesContext);
+
+    const toast = useToast();
 
     const { projectId } = useParams();
 
@@ -29,6 +32,15 @@ export default function useCreateFeature(){
     const featureOnSuccess = response => {
         const newFeature = response?.data;
         setFeatures(state => ([...state, newFeature]));
+
+        setName('');
+        setDescription('');
+
+        toast({
+            title: 'New feature has been successfully created!',
+            status:'success',
+            isClosable: true
+        });
     };
 
     const featureOnError = error => {

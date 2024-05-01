@@ -14,14 +14,25 @@ export default function ProjectDetailsFeatureSection() {
     const completeFeatures = features.filter(feature => feature?.status === COMPLETE_STATUS);
 
     return (
-        <Box>
+        <Box
+            width="100%"
+            display="grid"
+            gridTemplateColumns={{base: "1fr", md: "repeat(3, 1fr)"}}
+            mt="6"
+            paddingBlock="0.5em"
+            border="1px solid lightgray"
+            borderRadius="0.5em"
+        >
             {isLoading ? (
                 <div>Loading...</div>
             ) : error ? (
                 <Text>Error! Something went wrong!</Text>
             ) : (
                 <Fragment>
-                    <Box>
+                    <Box
+                        display="grid"
+                        rowGap="0.25em"
+                    >
                         <FeatureList features={todoFeatures} />
                         <CreateFeature />
                     </Box>

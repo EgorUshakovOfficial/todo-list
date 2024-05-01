@@ -24,7 +24,7 @@ export default function CreateProject(props) {
 
   return (
     <Fragment>
-      <Button onClick={createProjectProps.openModalOnClick}>Create Project</Button>
+      <Button mt="2" onClick={createProjectProps.openModalOnClick}>Create Project</Button>
       <Modal isOpen={createProjectProps.isModalOpen} onClose={createProjectProps.closeModalOnClick}>
         <ModalOverlay />
         <ModalContent>

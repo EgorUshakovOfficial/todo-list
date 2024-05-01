@@ -7,23 +7,23 @@ export default function AccountDetailsUserDetails(){
     const {name, email, username, ...callbackProps} = userDetailsProps;
 
     return (
-        <Box>
+        <Box mt="2">
             <EditField
-                fieldName="Name"
+                fieldName="name"
                 fieldObj={name}
                 fieldOnChange={callbackProps.nameOnChange}
                 fieldOnClick={callbackProps.nameOnClick}
                 updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('name', name.value)}
             />
             <EditField
-                fieldName="Email"
+                fieldName="email"
                 fieldObj={email}
                 fieldOnChange={callbackProps.emailOnChange}
                 fieldOnClick={callbackProps.emailOnClick}
                 updateFieldValueOnClick={() => callbackProps.updateFieldOnClick('email', email.value)}
             />
             <EditField
-                fieldName="Username"
+                fieldName="username"
                 fieldObj={username}
                 fieldOnChange={callbackProps.usernameOnChange}
                 fieldOnClick={callbackProps.usernameOnClick}

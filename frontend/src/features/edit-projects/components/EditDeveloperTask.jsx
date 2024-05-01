@@ -1,4 +1,5 @@
-import { Button, Text } from '@chakra-ui/react';
+import { Button, Text, Tooltip } from '@chakra-ui/react';
+import { CheckIcon } from '@chakra-ui/icons';
 import useEditTask from "../hooks/useEditTask";
 
 export default function EditDeveloperTask(props){
@@ -10,8 +11,10 @@ export default function EditDeveloperTask(props){
             Complete
         </Text>
         :
-        <Button color="green" onClick={developerTaskOnClick}>
-            Done
-        </Button>
+        <Tooltip label="Task complete">
+            <Button colorScheme='transparent' onClick={developerTaskOnClick}>
+                <CheckIcon color="green.500" />
+            </Button>
+        </Tooltip>
     );
 }

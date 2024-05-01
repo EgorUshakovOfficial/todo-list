@@ -1,5 +1,5 @@
 import { Fragment, useContext } from "react";
-import {Avatar, Menu, MenuList, MenuItem, MenuButton} from '@chakra-ui/react';
+import {Avatar, Box, Menu, MenuList, MenuItem, MenuButton} from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import { LOGIN_ENDPOINT } from "../../constants";
@@ -11,7 +11,11 @@ export default function HeaderNavLinks(){
     const callLogout = () => logout(logoutOnSuccess, logoutOnError);
 
     return (
-        <div>
+        <Box
+            display="flex"
+            alignItems="center"
+            gap="0.5em"
+        >
         { (authState.user === null) ?
             <Fragment>
                 <Link to={LOGIN_ENDPOINT}>Log In</Link>
@@ -37,6 +41,6 @@ export default function HeaderNavLinks(){
                 </Menu>
             </Fragment>
         }
-        </div>
+        </Box>
     );
 }

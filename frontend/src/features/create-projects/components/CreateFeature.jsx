@@ -21,18 +21,31 @@ export default function CreateFeature(){
     const descriptionError = errors.description;
 
     return (
-        <Accordion allowToggle>
+        <Accordion
+            allowToggle
+            width="96%"
+            marginInline="auto"
+            borderInline="1px solid lightgray"
+            borderRadius="0.25em"
+        >
             <AccordionItem>
-                <h2>
+                <Box
+                    as="h2"
+                >
                     <AccordionButton onClick={createFeatureProps.toggleAccordion}>
                         <Box as="span" flex='1' textAlign='left'>
                             Add Feature
                         </Box>
                         {createFeatureProps.isAccordionOpen ? <MinusIcon /> : <AddIcon />}
                     </AccordionButton>
-                </h2>
+                </Box>
                 <AccordionPanel pb={4}>
-                    <form onSubmit={createFeatureProps.formOnSubmit}>
+                    <Box
+                        as="form"
+                        display="grid"
+                        rowGap="0.25em"
+                        onSubmit={createFeatureProps.formOnSubmit}
+                    >
                         <FormControl isInvalid={nameError}>
                             <Input
                                 name="name"
@@ -49,14 +62,14 @@ export default function CreateFeature(){
                                 placeholder="Description"
                                 value={createFeatureProps.description}
                                 onChange={createFeatureProps.descriptionOnChange}
-                                mb={4}
+                                mb="1"
                             />
                             <FormErrorMessage>{descriptionError}</FormErrorMessage>
                         </FormControl>
                         <Button type="submit" colorScheme="blue">
                             Submit
                         </Button>
-                    </form>
+                    </Box>
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>

@@ -12,16 +12,19 @@ export default function FeatureDetailsInfoCard({ id, name, description }){
     } = useFeatureDetailsInfoCard(initialState);
 
     return (
-        <Box>
+        <Box
+            display="grid"
+            rowGap="0.25em"
+        >
             <EditField
-                fieldName="Name"
+                fieldName="name"
                 fieldObj={nameObj}
                 fieldOnChange={otherCallbacks.nameOnChange}
                 fieldOnClick={otherCallbacks.nameOnClick}
                 updateFieldValueOnClick={() => updateFieldValueOnClick('name', nameObj.value)}
             />
             <EditField
-                fieldName="Description"
+                fieldName="description"
                 fieldObj={descriptionObj}
                 fieldOnChange={otherCallbacks.descriptionOnChange}
                 fieldOnClick={otherCallbacks.descriptionOnClick}

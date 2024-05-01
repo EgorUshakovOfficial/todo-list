@@ -16,8 +16,8 @@ export default function AccountDetailsMain(){
                 Welcome {authState.user.name}! You can manage your account details here!
             </Text>
             <Box>
-            <AccountDetailsUserDetails />
-            <AccountDetailsDeleteAccount />
+                <AccountDetailsUserDetails />
+                <AccountDetailsDeleteAccount />
             </Box>
         </Box>
     )
